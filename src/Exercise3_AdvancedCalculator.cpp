@@ -84,7 +84,7 @@ public:
     Matrix<T> mul_matrix(Matrix<T> otra) {
         Matrix<T> res;
         if (cols != otra.rows) {
-            cout << "Matrix multiplication cannot be performed due to incompatible dimensions." << endl;
+            cout << "Error: multiplication cannot be performed. Columns of first matrix must equal rows of second." << endl;
             return res;
         }
         res.rows = rows;
@@ -99,6 +99,55 @@ public:
         }
         return res;
     }
+    //division entre escalar
+    Matrix<T> div_scalar(T scalar) {
+        Matrix<T> res;
+        if (scalar == 0) {
+            cout << "Error: division by zero is not allowed." << endl;
+            return res;
+        }
+        res.rows = rows;
+        res.cols = cols;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                res.matrix[i][j] = matrix[i][j] / scalar;
+            }
+        }
+        return res;
+    }
+    //matriz transpuesta
+    Matrix<T> transpose() {
+        Matrix<T> res;
+        res.rows = cols;
+        res.cols = rows;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                res.matrix[j][i] = matrix[i][j];
+            }
+        }
+        return res;
+    }
+    //determinante matriz
+    T determinant() {
+        if (cols != rows) {
+            cout << "Error: determinant is defined only for square matrices." << endl;
+            return 0;
+        }
+        if (rows == 1) {
+            return matrix[0][0];
+        }
+        if (rows == 2) {
+            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+        }
+        if (rows == 3) {
+            return matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1])
+            - matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0])
+            + matrix[0][2] * (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]);
+        }
+
+        cout << "Determinant calculation for matrices larger than 3x3 is not supported in this version." << endl;
+        return 0;
+    }
     //menu matrices
     void matrixMenu() {
         bool exit = false;
@@ -108,7 +157,10 @@ public:
             cout << "1. Add two matrices" << endl;
             cout << "2. Subtract two matrices" << endl;
             cout << "3. Multiplication two matrices" << endl;
-            cout << "4. Back to main menu" << endl;
+            cout << "4. Matrix division by a scalar" << endl;
+            cout << "5. Transpose matrix" << endl;
+            cout << "6. Determinant of matrix (square only)" << endl;
+            cout << "7. Back to main menu" << endl;
             cout << "\nSelect an option: " << endl;
             cin >> option;
 
@@ -158,7 +210,35 @@ public:
                     result.pri_matrix();
                     break;
                 }
-                case 4:
+                case 4: {
+                    cout << "Enter scalar to divide the matrix: " << endl;
+                    T scalar;
+                    cin >> scalar;
+                    Matrix<T> result = div_scalar(scalar);
+                    cout << "Result after division by " << scalar << ":" << endl;
+                    result.pri_matrix();
+                    break;
+                }
+                case 5: {
+                    Matrix<T> m;
+                    cout << "-------------------" << endl;
+                    cout << "  Original Matrix  " << endl;
+                    cout << "-------------------" << endl;
+                    m.ini_matrix();
+                    Matrix<T> result = m.transpose();
+                    cout << "Transposed matrix:" << endl;
+                    result.pri_matrix();
+                    break;
+                }
+                case 6: {
+                    Matrix<T> m;
+                    cout << "Enter square matrix:" << endl;
+                    m.ini_matrix();
+                    T det = m.determinant();
+                    cout << "Determinant:" << det << endl;
+                    break;
+                }
+                case 7:
                     exit = true;
                     break;
                 default:

@@ -11,4 +11,5 @@ add_executable(EjerciciosColaborativos2 main.cpp
         src/Exercise1_StudentManagement.cpp
         src/Exercise2_BackpackGame.cpp
         src/Exercise3_AdvancedCalculator.cpp
-        src/Exercise4_UserSystem.cpp)
+        src/Exercise4_UserSystem.cpp
+        include/StaticList.h)

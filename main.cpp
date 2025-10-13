@@ -5,6 +5,8 @@
 #include "include/Exercise4_UserSystem.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+//    Exercise1_StudentManagement exercise1Student;
+//   exercise1Student.run();
+
     return 0;
 }

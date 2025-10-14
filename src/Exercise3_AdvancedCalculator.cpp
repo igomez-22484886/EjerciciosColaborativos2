@@ -39,6 +39,87 @@ public:
             }
         }
     }
+    // --- Función auxiliar para calcular el adjunto (para la inversa) ---
+    void adjoint(T mat[10][10], T adj[10][10], int n) {
+        if (n == 1) {
+            adj[0][0] = 1;
+            return;
+        }
+
+        T temp[10][10];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                // Crear la submatriz para el cofactor
+                int subi = 0;
+                for (int row = 0; row < n; row++) {
+                    if (row == i) {
+                    } else {
+                        int subj = 0;
+                        for (int col = 0; col < n; col++) {
+                            if (col == j) {
+                            } else {
+                                temp[subi][subj] = mat[row][col];
+                                subj++;
+                            }
+                        }
+                        subi++;
+                    }
+                }
+
+                int sign;
+                if ((i + j) % 2 == 0) {
+                    sign = 1;
+                } else {
+                    sign = -1;
+                }
+
+                adj[j][i] = sign * determinantRecursive(temp, n - 1);
+            }
+        }
+    }
+
+    // --- Función auxiliar para invertir una matriz cuadrada (para división de matrices)---
+    bool inverse(T mat[10][10], T inv[10][10], int n) {
+        T det = determinantRecursive(mat, n);
+        if (det == 0) {
+            cout << "Error: The matrix is singular and cannot be inverted." << endl;
+            return false;
+        }
+
+        T adj[10][10];
+        adjoint(mat, adj, n);
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                inv[i][j] = adj[i][j] / det;
+            }
+        }
+
+        return true;
+    }
+    // --- NUEVO: División entre matrices (A / B = A * inv(B)) ---
+    Matrix<T> div_matrix(Matrix<T> otra) {
+        Matrix<T> res;
+        if (otra.rows != otra.cols) {
+            cout << "Error: only square matrices can be inverted for division." << endl;
+            return res;
+        }
+        T inv[10][10];
+        if (inverse(otra.matrix, inv, otra.rows) == false) {
+            return res; // No invertible
+        }
+
+        res.rows = rows;
+        res.cols = otra.cols;
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < otra.cols; j++) {
+                res.matrix[i][j] = 0;
+                for (int k = 0; k < cols; k++)
+                    res.matrix[i][j] += matrix[i][k] * inv[k][j];
+            }
+        return res;
+    }
     //Imprime la matriz
     void pri_matrix() {
         for (int i = 0; i < this->rows; i++) {
@@ -158,9 +239,10 @@ public:
             cout << "2. Subtract two matrices" << endl;
             cout << "3. Multiplication two matrices" << endl;
             cout << "4. Matrix division by a scalar" << endl;
-            cout << "5. Transpose matrix" << endl;
-            cout << "6. Determinant of matrix (square only)" << endl;
-            cout << "7. Back to main menu" << endl;
+            cout << "5. Divide two matrices (A * inv(B))" << endl;
+            cout << "6. Transpose matrix" << endl;
+            cout << "7. Determinant of matrix (square only)" << endl;
+            cout << "8. Back to main menu" << endl;
             cout << "\nSelect an option: " << endl;
             cin >> option;
 
@@ -220,6 +302,21 @@ public:
                     break;
                 }
                 case 5: {
+                    Matrix<T> m1, m2, result;
+                    cout << "------------" << endl;
+                    cout << "  Matrix A  " << endl;
+                    cout << "------------" << endl;
+                    m1.ini_matrix();
+                    cout << "------------" << endl;
+                    cout << "  Matrix B  " << endl;
+                    cout << "------------" << endl;
+                    m2.ini_matrix();
+                    result = m1.div_matrix(m2);
+                    cout << "Result of A / B:" << endl;
+                    result.pri_matrix();
+                    break;
+                }
+                case 6: {
                     Matrix<T> m;
                     cout << "-------------------" << endl;
                     cout << "  Original Matrix  " << endl;
@@ -230,7 +327,7 @@ public:
                     result.pri_matrix();
                     break;
                 }
-                case 6: {
+                case 7: {
                     Matrix<T> m;
                     cout << "Enter square matrix:" << endl;
                     m.ini_matrix();
@@ -238,7 +335,7 @@ public:
                     cout << "Determinant:" << det << endl;
                     break;
                 }
-                case 7:
+                case 8:
                     exit = true;
                     break;
                 default:

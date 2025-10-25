@@ -64,7 +64,6 @@ void Exercise2_BackpackGame::run() {
 
     const std::string nombreArchivo = "ejemplo.txt";
 
-    // 🔹 If the file doesn't exist, create it automatically
     if (!std::filesystem::exists(nombreArchivo)) {
         std::ofstream nuevoArchivo(nombreArchivo);
         if (nuevoArchivo.is_open()) {

@@ -115,6 +115,46 @@ public:
     }
 };
 
+class Admin{
+private:
+    int id;
+    std::string name, surname, role;
+    StaticList<User> users;
+public:
+    Admin() {
+
+    }
+    Admin(int id, std::string name, std::string surname, std::string role,StaticList<User> users) {
+        this->id = id;
+        this->name = name;
+        this->surname = surname;
+        this->role = role;
+        this->users = users;
+    }
+    int getId() {
+        return id;
+    }
+    std::string getName() {
+        return name;
+    }
+    std::string getSname() {
+        return surname;
+    }
+    std::string getRole() {
+        return role;
+    }
+    StaticList<User> getUsers() {
+        return users;
+    }
+    void addUser(User& user) {
+        users.insertAtEnd(user);
+    }
+    void removeUser(User& user) {
+        users.delete(user);
+    }
+};
+
+
 void Exercise1_StudentManagement::run() {
     Teacher teacher(1, "Jorge", "Gonzalez", "Profesor");
 

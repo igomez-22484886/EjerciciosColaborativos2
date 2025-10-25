@@ -39,6 +39,32 @@ public:
             }
         }
     }
+    T determinantRecursive(T mat[10][10], int n) {
+        T det = 0;
+        if (n == 1)
+            return mat[0][0];
+
+        T temp[10][10];
+        int sign = 1;
+
+        for (int f = 0; f < n; f++) {
+            // Crear submatriz para cofactor
+            int subi = 0;
+            for (int i = 1; i < n; i++) {
+                int subj = 0;
+                for (int j = 0; j < n; j++) {
+                    if (j == f)
+                        continue;
+                    temp[subi][subj] = mat[i][j];
+                    subj++;
+                }
+                subi++;
+            }
+            det += sign * mat[0][f] * determinantRecursive(temp, n - 1);
+            sign = -sign;
+        }
+        return det;
+    }
     // --- Función auxiliar para calcular el adjunto (para la inversa) ---
     void adjoint(T mat[10][10], T adj[10][10], int n) {
         if (n == 1) {
@@ -372,7 +398,7 @@ class Calculator {
             cout << "The multiplication of " << a << " and " << b << " is: " << a*b << endl;
         }
         void divide() {
-            T a,b;
+            int a,b;
             cout << "Enter two values: " << endl;
             cin >> a;
             cin >> b;
@@ -397,27 +423,35 @@ class Calculator {
                 cout << "\nSelect an option: " << endl;
                 cin >> opt;
                 switch (opt) {
-                    case 1:
+                    case 1: {
                         add();
                         break;
-                    case 2:
+                    }
+                    case 2: {
                         subtract();
                         break;
-                    case 3:
+                    }
+                    case 3: {
                         multiply();
                         break;
-                    case 4:
+                    }
+                    case 4: {
                         divide();
                         break;
-                    case 5:
+                    }
+                    case 5: {
                         Matrix<T> m;
                         m.matrixMenu();
                         break;
-                    case 6:
+                    }
+                    case 6: {
                         exit=true;
                         break;
-                    default:
+                    }
+                    default: {
                         cout << "Invalid option!" << endl;
+                        break;
+                    }
                 }
             }
         }
@@ -427,4 +461,6 @@ class Calculator {
 void Exercise3_AdvancedCalculator::run() {
     cout << "Ejecutando Exercise 1 - Student Management..." << endl;
     // Aquí pondrás todo el menú y lógica del ejercicio 1
+    Calculator<int> calc;
+    calc.menu();
 }

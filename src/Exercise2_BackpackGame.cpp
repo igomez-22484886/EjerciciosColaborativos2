@@ -2,52 +2,58 @@
 // Created by Israel on 07/10/2025.
 //
 using namespace std;
-#include <iostream>
-#include <vector>
-#include <string>
 #include <fstream>
-#include <sstream>
-#include <utility>
-#include "../include/Exercise2_BackpackGame.h"
+#include <iostream>
+#include <filesystem>
 
-
-class Documento {
+class Exercise2_BackpackGame {
 private:
     std::string nombre;
     std::string contenido;
+
 public:
-    // Constructor que recibe nombre y contenido (la lectura se realiza en MochilaDigital)
-    Documento(std::string nombre_, std::string contenido_) : nombre(std::move(nombre_)), contenido(std::move(contenido_)) {}
-    [[nodiscard]] const std::string& getNombre() const { return nombre; }
-    [[nodiscard]] const std::string& getContenido() const { return contenido; }
+    Exercise2_BackpackGame(std::string nom) : nombre(nom) {}
+
+    bool cargarDesdeArchivo(std::string ruta) {
+        std::ifstream archivo(ruta);
+        if (!archivo.is_open()) return false;
+
+        std::string linea;
+        contenido = "";
+        while (getline(archivo, linea)) {
+            contenido += linea + "\n";
+        }
+        archivo.close();
+        return true;
+    }
+
+    void mostrarContenido() {
+        std::cout << "Documento: " << nombre << std::endl;
+        std::cout << contenido << std::endl;
+    }
+
+    void run();
 };
 
 class MochilaDigital {
 private:
-    std::vector<Documento> documentos;
+    Exercise2_BackpackGame* documentos[20]; // Array para máximo 20 documentos
+    int numDocumentos;
+
 public:
-    // Agrega un documento leyendo el archivo; retorna true si se pudo leer y agregar
-    bool agregarDocumento(const std::string& rutaArchivo) {
-        std::ifstream archivo(rutaArchivo);
-        if (!archivo.is_open()) {
-            return false;
+    MochilaDigital() : numDocumentos(0) {}
+
+    bool agregarDocumento(Exercise2_BackpackGame *doc) {
+        if (numDocumentos < 20) {
+            documentos[numDocumentos++] = doc;
+            return true;
         }
-        std::stringstream buffer;
-        buffer << archivo.rdbuf();
-        std::string contenido = buffer.str();
-        documentos.emplace_back(rutaArchivo, contenido);
-        return true;
+        return false;
     }
 
-    void mostrarDocumentos() const {
-        if (documentos.empty()) {
-            std::cout << "La mochila está vacía." << std::endl;
-            return;
-        }
-        for (const auto& doc : documentos) {
-            std::cout << "Documento: " << doc.getNombre() << std::endl;
-            std::cout << doc.getContenido() << std::endl;
-            std::cout << "-------------------" << std::endl;
+    void mostrarMochila() {
+        for (int i = 0; i < numDocumentos; i++) {
+            documentos[i]->mostrarContenido();
         }
     }
 };
@@ -56,15 +62,17 @@ public:
 void Exercise2_BackpackGame::run() {
     std::cout << "Ejecutando Ejercicio 2 - Mochila Digital..." << std::endl;
     MochilaDigital mochila;
-    const std::string ejemplo = "ejemplo.txt";
-    if (mochila.agregarDocumento(ejemplo)) {
-        std::cout << "Documento agregado correctamente." << std::endl;
-    } else {
-        std::cout << "No se pudo agregar el documento '" << ejemplo << "'." << std::endl;
+    Exercise2_BackpackGame* ejemplo = new Exercise2_BackpackGame(std::string("ejemplo.txt"));
+    std::cout << "Cargando archivo `ejemplo.txt`..." << std::endl;
+    if (!ejemplo->cargarDesdeArchivo(std::string("ejemplo.txt"))) {
+        std::cout << "No se pudo cargar el archivo `ejemplo.txt`." << std::endl;
     }
+    mochila.agregarDocumento(ejemplo);
+    std::cout << "Mochila actual:" << std::endl;
+    mochila.mostrarMochila();
 
-    mochila.mostrarDocumentos();
+    std::cout << "cwd: " << std::filesystem::current_path() << std::endl;
+    std::cout << "existe `ejemplo.txt`: " << std::filesystem::exists("ejemplo.txt") << std::endl;
 
-    cout << endl;
-
+    std::cout << std::endl;
 }

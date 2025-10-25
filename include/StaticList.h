@@ -16,7 +16,8 @@ private:
     T container[MAX_SIZE];
     int num_elements;
 
-    void insertMultiple() {}
+    void insertMultiple() {
+    }
 
     template<typename First, typename... Rest>
     void insertMultiple(First first, Rest... rest) {
@@ -25,7 +26,8 @@ private:
     }
 
 public:
-    StaticList() : num_elements(0) {}
+    StaticList() : num_elements(0) {
+    }
 
     template<typename... Args>
     StaticList(Args... args) : num_elements(0) {
@@ -37,7 +39,10 @@ public:
     int size() const { return num_elements; }
 
     void insertAtEnd(const T &element) {
-        if (isFull()) { cout << "List is full\n"; return; }
+        if (isFull()) {
+            cout << "List is full\n";
+            return;
+        }
         container[num_elements++] = element;
     }
 
@@ -46,8 +51,14 @@ public:
     }
 
     void insertAt(const T &element, int position) {
-        if (position < 0 || position > num_elements) { cout << "Invalid position\n"; return; }
-        if (isFull()) { cout << "List is full\n"; return; }
+        if (position < 0 || position > num_elements) {
+            cout << "Invalid position\n";
+            return;
+        }
+        if (isFull()) {
+            cout << "List is full\n";
+            return;
+        }
 
         for (int i = num_elements; i > position; --i) {
             container[i] = container[i - 1];
@@ -57,15 +68,24 @@ public:
     }
 
     T extractAtEnd() {
-        if (isEmpty()) { cout << "List is empty\n"; return T{}; }
+        if (isEmpty()) {
+            cout << "List is empty\n";
+            return T{};
+        }
         return container[--num_elements];
     }
 
     T extractAtBeginning() { return extractAt(0); }
 
     T extractAt(int position) {
-        if (isEmpty()) { cout << "List is empty\n"; return T{}; }
-        if (position < 0 || position >= num_elements) { cout << "Invalid position\n"; return T{}; }
+        if (isEmpty()) {
+            cout << "List is empty\n";
+            return T{};
+        }
+        if (position < 0 || position >= num_elements) {
+            cout << "Invalid position\n";
+            return T{};
+        }
 
         T temp = container[position];
         for (int i = position; i < num_elements - 1; ++i) {

@@ -12,14 +12,14 @@ private:
     std::string contenido;
 
 public:
-    Exercise2_BackpackGame(std::string nom) : nombre(nom) {}
+    Exercise2_BackpackGame(std::string nom) : nombre(std::move(nom)) {}
 
-    bool cargarDesdeArchivo(std::string ruta) {
+    bool cargarDesdeArchivo(const std::string& ruta) {
         std::ifstream archivo(ruta);
         if (!archivo.is_open()) return false;
 
         std::string linea;
-        contenido = "";
+        contenido.clear();
         while (getline(archivo, linea)) {
             contenido += linea + "\n";
         }
@@ -27,8 +27,8 @@ public:
         return true;
     }
 
-    void mostrarContenido() {
-        std::cout << "Documento: " << nombre << std::endl;
+    void mostrarContenido() const {
+        std::cout << "Document: " << nombre << std::endl;
         std::cout << contenido << std::endl;
     }
 
@@ -37,13 +37,13 @@ public:
 
 class MochilaDigital {
 private:
-    Exercise2_BackpackGame* documentos[20]; // Array para máximo 20 documentos
+    Exercise2_BackpackGame* documentos[20];
     int numDocumentos;
 
 public:
     MochilaDigital() : numDocumentos(0) {}
 
-    bool agregarDocumento(Exercise2_BackpackGame *doc) {
+    bool agregarDocumento(Exercise2_BackpackGame* doc) {
         if (numDocumentos < 20) {
             documentos[numDocumentos++] = doc;
             return true;
@@ -51,7 +51,7 @@ public:
         return false;
     }
 
-    void mostrarMochila() {
+    void mostrarMochila() const {
         for (int i = 0; i < numDocumentos; i++) {
             documentos[i]->mostrarContenido();
         }
@@ -60,19 +60,40 @@ public:
 
 
 void Exercise2_BackpackGame::run() {
-    std::cout << "Ejecutando Ejercicio 2 - Mochila Digital..." << std::endl;
-    MochilaDigital mochila;
-    Exercise2_BackpackGame* ejemplo = new Exercise2_BackpackGame(std::string("ejemplo.txt"));
-    std::cout << "Cargando archivo `ejemplo.txt`..." << std::endl;
-    if (!ejemplo->cargarDesdeArchivo(std::string("ejemplo.txt"))) {
-        std::cout << "No se pudo cargar el archivo `ejemplo.txt`." << std::endl;
+    std::cout << "Running Exercise 2 - Digital Backpack..." << std::endl;
+
+    const std::string nombreArchivo = "ejemplo.txt";
+
+    // 🔹 If the file doesn't exist, create it automatically
+    if (!std::filesystem::exists(nombreArchivo)) {
+        std::ofstream nuevoArchivo(nombreArchivo);
+        if (nuevoArchivo.is_open()) {
+            nuevoArchivo << "This is an example file created automatically.\n";
+            nuevoArchivo << "You can edit or replace it anytime.\n";
+            nuevoArchivo.close();
+            std::cout << "File '" << nombreArchivo << "' did not exist and has been created automatically.\n";
+        } else {
+            std::cerr << "Error: could not create file '" << nombreArchivo << "'.\n";
+            return;
+        }
     }
+
+    MochilaDigital mochila;
+    auto* ejemplo = new Exercise2_BackpackGame(nombreArchivo);
+
+    std::cout << "Loading file '" << nombreArchivo << "'..." << std::endl;
+    if (!ejemplo->cargarDesdeArchivo(nombreArchivo)) {
+        std::cout << "Could not load file '" << nombreArchivo << "'." << std::endl;
+    }
+
     mochila.agregarDocumento(ejemplo);
-    std::cout << "Mochila actual:" << std::endl;
+
+    std::cout << "Current backpack:" << std::endl;
     mochila.mostrarMochila();
 
-    std::cout << "cwd: " << std::filesystem::current_path() << std::endl;
-    std::cout << "existe `ejemplo.txt`: " << std::filesystem::exists("ejemplo.txt") << std::endl;
+    std::cout << "Current directory: " << std::filesystem::current_path() << std::endl;
+    std::cout << "File '" << nombreArchivo << "' exists: "
+              << std::filesystem::exists(nombreArchivo) << std::endl;
 
     std::cout << std::endl;
 }

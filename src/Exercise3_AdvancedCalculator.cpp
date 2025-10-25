@@ -8,11 +8,12 @@ using namespace std;
 // ========
 //  Matrix
 // ========
-template <typename T>
+template<typename T>
 class Matrix {
 private:
     T matrix[10][10];
     int rows, cols;
+
 public:
     //Constructor
     Matrix() {
@@ -24,6 +25,7 @@ public:
             }
         }
     }
+
     //Inicializa la matriz
     void ini_matrix() {
         T dat;
@@ -39,6 +41,7 @@ public:
             }
         }
     }
+
     T determinantRecursive(T mat[10][10], int n) {
         T det = 0;
         if (n == 1)
@@ -65,6 +68,7 @@ public:
         }
         return det;
     }
+
     // --- Función auxiliar para calcular el adjunto (para la inversa) ---
     void adjoint(T mat[10][10], T adj[10][10], int n) {
         if (n == 1) {
@@ -124,6 +128,7 @@ public:
 
         return true;
     }
+
     // --- NUEVO: División entre matrices (A / B = A * inv(B)) ---
     Matrix<T> div_matrix(Matrix<T> otra) {
         Matrix<T> res;
@@ -146,6 +151,7 @@ public:
             }
         return res;
     }
+
     //Imprime la matriz
     void pri_matrix() {
         for (int i = 0; i < this->rows; i++) {
@@ -155,6 +161,7 @@ public:
             cout << endl;
         }
     }
+
     //Sumar matrices
     Matrix<T> add_matrix(Matrix<T> otra) {
         Matrix<T> res;
@@ -171,6 +178,7 @@ public:
         }
         return res;
     }
+
     //Restar matrices
     Matrix<T> sub_matrix(Matrix<T> otra) {
         Matrix<T> res;
@@ -187,11 +195,13 @@ public:
         }
         return res;
     }
+
     //multiplicacion matrices
     Matrix<T> mul_matrix(Matrix<T> otra) {
         Matrix<T> res;
         if (cols != otra.rows) {
-            cout << "Error: multiplication cannot be performed. Columns of first matrix must equal rows of second." << endl;
+            cout << "Error: multiplication cannot be performed. Columns of first matrix must equal rows of second." <<
+                    endl;
             return res;
         }
         res.rows = rows;
@@ -206,6 +216,7 @@ public:
         }
         return res;
     }
+
     //division entre escalar
     Matrix<T> div_scalar(T scalar) {
         Matrix<T> res;
@@ -222,6 +233,7 @@ public:
         }
         return res;
     }
+
     //matriz transpuesta
     Matrix<T> transpose() {
         Matrix<T> res;
@@ -234,6 +246,7 @@ public:
         }
         return res;
     }
+
     //determinante matriz
     T determinant() {
         if (cols != rows) {
@@ -248,13 +261,14 @@ public:
         }
         if (rows == 3) {
             return matrix[0][0] * (matrix[1][1] * matrix[2][2] - matrix[1][2] * matrix[2][1])
-            - matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0])
-            + matrix[0][2] * (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]);
+                   - matrix[0][1] * (matrix[1][0] * matrix[2][2] - matrix[1][2] * matrix[2][0])
+                   + matrix[0][2] * (matrix[1][0] * matrix[2][1] - matrix[1][1] * matrix[2][0]);
         }
 
         cout << "Determinant calculation for matrices larger than 3x3 is not supported in this version." << endl;
         return 0;
     }
+
     //menu matrices
     void matrixMenu() {
         bool exit = false;
@@ -370,97 +384,101 @@ public:
         }
     }
 };
+
 // ============
 //  Calculator
 // ============
-template <typename T>
+template<typename T>
 class Calculator {
-    public:
-        void add() {
-            T a,b;
-            cout << "Enter two values: " << endl;
-            cin >> a;
-            cin >> b;
-            cout << "The sum of " << a << " and " << b << " is: " << a+b << endl;
+public:
+    void add() {
+        T a, b;
+        cout << "Enter two values: " << endl;
+        cin >> a;
+        cin >> b;
+        cout << "The sum of " << a << " and " << b << " is: " << a + b << endl;
+    }
+
+    void subtract() {
+        T a, b;
+        cout << "Enter two values: " << endl;
+        cin >> a;
+        cin >> b;
+        cout << "The subtraction of " << a << " and " << b << " is: " << a - b << endl;
+    }
+
+    void multiply() {
+        T a, b;
+        cout << "Enter two values: " << endl;
+        cin >> a;
+        cin >> b;
+        cout << "The multiplication of " << a << " and " << b << " is: " << a * b << endl;
+    }
+
+    void divide() {
+        int a, b;
+        cout << "Enter two values: " << endl;
+        cin >> a;
+        cin >> b;
+        if (b == 0) {
+            cout << "Error: division by zero is not allowed." << endl;
+            return;
         }
-        void subtract() {
-            T a,b;
-            cout << "Enter two values: " << endl;
-            cin >> a;
-            cin >> b;
-            cout << "The subtraction of " << a << " and " << b << " is: " << a-b << endl;
-        }
-        void multiply() {
-            T a,b;
-            cout << "Enter two values: " << endl;
-            cin >> a;
-            cin >> b;
-            cout << "The multiplication of " << a << " and " << b << " is: " << a*b << endl;
-        }
-        void divide() {
-            int a,b;
-            cout << "Enter two values: " << endl;
-            cin >> a;
-            cin >> b;
-            if (b == 0) {
-                cout << "Error: division by zero is not allowed." << endl;
-                return;
-            }
-            cout << "The result of the division is: " << a/b << endl;
-            cout << "The remainder of the division is: " << a % b << endl;
-        }
-        void menu() {
-            bool exit=false;
-            while (!exit) {
-                int opt;
-                cout << "-----Menu-----" << endl;
-                cout << "1. Add" << endl;
-                cout << "2. Subtract" << endl;
-                cout << "3. Multiply" << endl;
-                cout << "4. Divide" << endl;
-                cout << "5. Matrix operations" << endl;
-                cout << "6. Exit" << endl;
-                cout << "\nSelect an option: " << endl;
-                cin >> opt;
-                switch (opt) {
-                    case 1: {
-                        add();
-                        break;
-                    }
-                    case 2: {
-                        subtract();
-                        break;
-                    }
-                    case 3: {
-                        multiply();
-                        break;
-                    }
-                    case 4: {
-                        divide();
-                        break;
-                    }
-                    case 5: {
-                        Matrix<T> m;
-                        m.matrixMenu();
-                        break;
-                    }
-                    case 6: {
-                        exit=true;
-                        break;
-                    }
-                    default: {
-                        cout << "Invalid option!" << endl;
-                        break;
-                    }
+        cout << "The result of the division is: " << a / b << endl;
+        cout << "The remainder of the division is: " << a % b << endl;
+    }
+
+    void menu() {
+        bool exit = false;
+        while (!exit) {
+            int opt;
+            cout << "-----Menu-----" << endl;
+            cout << "1. Add" << endl;
+            cout << "2. Subtract" << endl;
+            cout << "3. Multiply" << endl;
+            cout << "4. Divide" << endl;
+            cout << "5. Matrix operations" << endl;
+            cout << "6. Exit" << endl;
+            cout << "\nSelect an option: " << endl;
+            cin >> opt;
+            switch (opt) {
+                case 1: {
+                    add();
+                    break;
+                }
+                case 2: {
+                    subtract();
+                    break;
+                }
+                case 3: {
+                    multiply();
+                    break;
+                }
+                case 4: {
+                    divide();
+                    break;
+                }
+                case 5: {
+                    Matrix<T> m;
+                    m.matrixMenu();
+                    break;
+                }
+                case 6: {
+                    exit = true;
+                    break;
+                }
+                default: {
+                    cout << "Invalid option!" << endl;
+                    break;
                 }
             }
         }
+    }
 };
 
 
 void Exercise3_AdvancedCalculator::run() {
-    cout << "Ejecutando Exercise 1 - Student Management..." << endl;
-    // Aquí pondrás todo el menú y lógica del ejercicio 1
+    cout << "Ejecutando Exercise 3 - Advanced Calculator..." << endl;
     Calculator<int> calc;
     calc.menu();
 }

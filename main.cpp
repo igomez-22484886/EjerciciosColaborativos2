@@ -5,7 +5,18 @@
 #include "include/Exercise4_UserSystem.h"
 
 int main() {
-    Exercise4_UserSystem system;
-    system.run();
+
+    // Exercise1_StudentManagement exercise1Student;
+    // exercise1Student.run();
+
+    // Exercise2_BackpackGame exercise2Backpack;
+    // exercise2Backpack.run();
+
+    // Exercise3_AdvancedCalculator exercise3Calculator;
+    // exercise3Calculator.run();
+
+    Exercise4_UserSystem exercise4UserSystem;
+    exercise4UserSystem.run();
+
     return 0;
 }

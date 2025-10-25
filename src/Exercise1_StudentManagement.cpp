@@ -21,19 +21,19 @@ public:
         this->role = role;
     }
 
-    int getId()const {
+    int getId() const {
         return id;
     }
 
-    std::string getName()const {
+    std::string getName() const {
         return name;
     }
 
-    std::string getSurname() const{
+    std::string getSurname() const {
         return surname;
     }
 
-    std::string getRole() const{
+    std::string getRole() const {
         return role;
     }
 
@@ -91,8 +91,10 @@ public:
 class Teacher : public User {
 private:
     StaticList<Student> studentClass;
+
 public:
-    Teacher() {}
+    Teacher() {
+    }
 
     Teacher(int id, std::string name, std::string surname, std::string role) {
         this->setId(id);
@@ -109,47 +111,55 @@ public:
         cout << "\nTeacher: " << getName() << " " << getSurname() << endl;
         cout << "Students number: " << studentClass.size() << endl;
         cout << "Student list:\n";
-        for (Student student : studentClass) {
+        for (Student student: studentClass) {
             student.showData();
         }
     }
 };
 
-class Admin{
+class Admin {
 private:
     int id;
     std::string name, surname, role;
     StaticList<User> users;
+
 public:
     Admin() {
-
     }
-    Admin(int id, std::string name, std::string surname, std::string role,StaticList<User> users) {
+
+    Admin(int id, std::string name, std::string surname, std::string role, StaticList<User> users) {
         this->id = id;
         this->name = name;
         this->surname = surname;
         this->role = role;
         this->users = users;
     }
+
     int getId() {
         return id;
     }
+
     std::string getName() {
         return name;
     }
+
     std::string getSname() {
         return surname;
     }
+
     std::string getRole() {
         return role;
     }
+
     StaticList<User> getUsers() {
         return users;
     }
-    void addUser(User& user) {
+
+    void addUser(User &user) {
         users.insertAtEnd(user);
     }
-    void removeUser(User& user) {
+
+    void removeUser(User &user) {
         users.remove(user);
     }
 };
@@ -171,4 +181,3 @@ void Exercise1_StudentManagement::run() {
 
     teacher.showClass();
 }
-

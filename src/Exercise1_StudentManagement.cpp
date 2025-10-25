@@ -21,19 +21,19 @@ public:
         this->role = role;
     }
 
-    int getId() {
+    int getId()const {
         return id;
     }
 
-    std::string getName() {
+    std::string getName()const {
         return name;
     }
 
-    std::string getSurname() {
+    std::string getSurname() const{
         return surname;
     }
 
-    std::string getRole() {
+    std::string getRole() const{
         return role;
     }
 
@@ -150,7 +150,7 @@ public:
         users.insertAtEnd(user);
     }
     void removeUser(User& user) {
-        users.delete(user);
+        users.remove(user);
     }
 };
 

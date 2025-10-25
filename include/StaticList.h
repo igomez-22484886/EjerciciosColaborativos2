@@ -75,6 +75,25 @@ public:
         return temp;
     }
 
+    void remove(const T &element) {
+        int pos = -1;
+        for (int i = 0; i < num_elements; ++i) {
+            if (container[i].getId() == element.getId()) {
+                pos = i;
+                break;
+            }
+        }
+        if (pos != -1) {
+            for (int i = pos; i < num_elements - 1; ++i) {
+                container[i] = container[i + 1];
+            }
+            --num_elements;
+        } else {
+            cout << "Element not found in the list\n";
+        }
+    }
+
+
     T *at(int position) const {
         if (position < 0 || position >= num_elements) return NULL;
         return &container[position];
